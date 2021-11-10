@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "com.quiestce.webapp.apiUrl",
+  "type": "java.lang.String",
+  "description": "A description for 'com.quiestce.webapp.apiUrl'"
+}]}
