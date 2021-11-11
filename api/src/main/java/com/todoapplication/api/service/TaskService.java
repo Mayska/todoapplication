@@ -28,8 +28,23 @@ public class TaskService {
 	 * @return
 	 */
 	public Iterable<Task> getAllTask() {
+		final Iterable<Task> findAll = taskRepository.findAll();
 		logger.info(TaskConstant.GET_ALL_TASK);
-		return taskRepository.findAll();
+		return findAll;
+	}
+
+	/**
+	 * Update state 
+	 * @param task
+	 */
+	public void updateStateTask(Task task) {
+		if(task.isState()) {
+			task.setState(false);
+		}else {
+			task.setState(true);
+		}
+		final Task saveTask = taskRepository.save(task);
+		logger.info(TaskConstant.UPDATE_TASK_STATE + saveTask.getId());
 	}
 
 }
