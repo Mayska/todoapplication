@@ -62,7 +62,13 @@ public class TaskService {
 		return Sort.by(desc, value);
 	}
 
+	/***
+	 * Get task by id in DB.
+	 * @param task
+	 * @return
+	 */
 	public Task getTaskById(Task task) {
+		logger.info(TaskConstant.GET_TASK_ID + task.getId());
 		return task;
 	}
 	

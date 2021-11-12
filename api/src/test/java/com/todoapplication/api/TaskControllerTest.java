@@ -4,7 +4,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -32,6 +31,8 @@ public class TaskControllerTest {
 	@Autowired
 	private TaskRepository taskRepository; 
 	
+	private final Long ID = 999L;
+	
 	/**
 	 * Test calling the method getAllTask status 200
 	 * @throws Exception
@@ -51,18 +52,17 @@ public class TaskControllerTest {
 	 */
 	@Test
 	public void TestGetAllTask_InsertTaskInDb() throws Exception {
-		final Task task = newTask("InsertTaskInDb");
+		final String title = "InsertTaskInDb";
+		final Task task = newTask(title,null);
 		final Task taskSave = taskRepository.save(task);
 		assertTrue(taskSave.isState());
 		assertEquals(task.getTitle(), taskSave.getTitle());
-		assertNull(taskSave.getDescription());
+		assertEquals("",taskSave.getDescription());
 		mockMvc.perform(get("/alltask"))
-		.andDo(print())
+		//.andDo(print())
 		.andExpect(status().isOk())
 	    .andExpect(jsonPath("$[0].id", is(3)))
 	    .andExpect(jsonPath("$[0].state", is(Boolean.TRUE)))
-	    .andExpect(jsonPath("$[1].id", is(4)))
-	    .andExpect(jsonPath("$[1].state", is(Boolean.TRUE)))
 	    .andExpect(jsonPath("$[1].id", is(taskSave.getId().intValue())))
 		.andExpect(jsonPath("$[1].title", is(taskSave.getTitle())))
 		.andExpect(jsonPath("$[1].description", is(taskSave.getDescription())))
@@ -83,7 +83,7 @@ public class TaskControllerTest {
 		final Task task = taskRepository.findById(1L).get();
 		assertTrue(task.isState());
 		mockMvc.perform(get("/finishtask/" +  task.getId()))
-		.andDo(print())
+		// .andDo(print())
         .andExpect(status().isOk());
 		final Task modifyTask = taskRepository.findById(1L).get();
 		assertEquals(task.getTitle(), modifyTask.getTitle());
@@ -98,18 +98,62 @@ public class TaskControllerTest {
 	 * @throws Exception
 	 */
 	@Test
-	public void TestUpdateStateTask_findTaskWithBadId() throws Exception {
-		final Long id = 999L;
-		final String msgError = TaskConstant.ERROR_TASK_ID + id;
-		mockMvc.perform(get("/finishtask/" +  id))
+	public void TestUpdateStateTask_findTaskWithBadId() throws Exception {		
+		final String msgError = TaskConstant.ERROR_TASK_ID + ID;
+		mockMvc.perform(get("/finishtask/" +  ID))
+		// .andDo(print())
+        .andExpect(status().is(400))
+        .andExpect(status().reason(msgError));
+	}
+	
+	/**
+	 * Find my new task by id
+	 * @throws Exception
+	 */
+	@Test
+	public void TestGetTaskById_findTaskById() throws Exception {
+		final String title = "My newTask";
+		final String description = "My new description";
+		final Task task = newTask(title,description);
+		final Task taskSave = taskRepository.save(task);
+		assertTrue(taskSave.isState());
+		assertEquals(task.getTitle(), taskSave.getTitle());
+		assertEquals(task.getDescription(), taskSave.getDescription());
+		mockMvc.perform(get("/findtask/{id}", taskSave.getId()))
+		.andDo(print())
+	    .andExpect(jsonPath("$.id", is(taskSave.getId().intValue())))
+		.andExpect(jsonPath("$.title", is(taskSave.getTitle())))
+		.andExpect(jsonPath("$.description", is(taskSave.getDescription())))
+		.andExpect(jsonPath("$.createdAt", is(taskSave.getCreatedAt())))
+		.andExpect(jsonPath("$.state", is(Boolean.TRUE)));
+		taskRepository.delete(taskSave);
+	}
+	
+	/**
+	 * Find task by a non-existent id.
+	 * @throws Exception
+	 */
+	@Test
+	public void TestGetTaskById_findTaskWithBadId() throws Exception {
+		final String msgError = TaskConstant.ERROR_TASK_ID + ID;
+		mockMvc.perform(get("/findtask/{id}", ID))
         .andExpect(status().is(400))
         .andExpect(status().reason(msgError))
         .andDo(print());
 	}
 	
-	private Task newTask(String title) {
+	
+	/**
+	 * Create Task
+	 * @param title
+	 * @param description
+	 * @return
+	 */
+	private Task newTask(String title, String description) {
+		description = description != null ? description : "";		
 		final Task task = new Task();
 		task.setTitle(title);
+		task.setDescription(description);
 		task.setState(true);
 		return task;
 	}

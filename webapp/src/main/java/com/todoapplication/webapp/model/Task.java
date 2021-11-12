@@ -1,20 +1,37 @@
 package com.todoapplication.webapp.model;
 
-import java.time.OffsetDateTime;
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
+/**
+ * Model Task
+ * @author pc
+ *
+ */
 public class Task {
 
-private Long id;
+	/**
+	 * task id
+	 */
+	private Long id;
 	
+	/**
+	 * task title.
+	 */
 	private String title;
 	
+	/**
+	 * task description.
+	 */
 	private String description;
 
+	/**
+	 * task creation date.
+	 */
 	private Date createdAt;
 	
+	/**
+	 * task state : true must to do / false is finish
+	 */
 	private boolean state;
 
 	public Long getId() {
