@@ -1,5 +1,7 @@
 package com.todoapplication.api.apiservice;
 
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Optional;
 
@@ -98,7 +100,10 @@ public class TaskApiService {
 			task.setDescription("");
 		}
 		task.setState(true);
-		task.setCreatedAt(new Date());
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		OffsetDateTime now = OffsetDateTime.now();
+		task.setCreatedAt(now.format(formatter));
+		// task.setCreatedAt(new Date());
 		return task;
 	}
 }

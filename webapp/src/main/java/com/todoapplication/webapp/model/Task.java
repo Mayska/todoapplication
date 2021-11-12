@@ -27,7 +27,7 @@ public class Task {
 	/**
 	 * task creation date.
 	 */
-	private Date createdAt;
+	private String createdAt;
 	
 	/**
 	 * task state : true must to do / false is finish
@@ -66,11 +66,19 @@ public class Task {
 		this.state = state;
 	}
 
-	public Date getCreatedAt() {
+	public String getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(Date createdAt) {
+	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
 	}
+
+//	public Date getCreatedAt() {
+//		return createdAt;
+//	}
+//
+//	public void setCreatedAt(Date createdAt) {
+//		this.createdAt = createdAt;
+//	}
 }

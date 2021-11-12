@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.OffsetDateTime;
 import java.util.Date;
 
 import org.aspectj.lang.annotation.Before;
@@ -129,12 +130,13 @@ public class TaskControllerTest {
 		final String description = "My new description";
 		final Task task = newTask(title,description);
 		final Task taskSave = taskApiService.createNewTask(task);
+		String createdAt = taskSave.getCreatedAt();
 		mockMvc.perform(get("/findtask/{id}", taskSave.getId()))
 		.andDo(print())
 	    .andExpect(jsonPath("$.id", is(taskSave.getId().intValue())))
 		.andExpect(jsonPath("$.title", is(taskSave.getTitle())))
 		.andExpect(jsonPath("$.description", is(taskSave.getDescription())))
-		//.andExpect(jsonPath("$.createdAt", is()))
+		.andExpect(jsonPath("$.createdAt", is(createdAt)))
 		.andExpect(jsonPath("$.state", is(true)));
 		taskRepository.delete(taskSave);
 	}

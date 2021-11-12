@@ -32,10 +32,12 @@ public class TaskService {
 	 * @return
 	 */
 	public Iterable<Task> getAllTask() {
-		String value = "state";
+		String state = "state";
+		String date = "createdAt";
 		final Direction desc = Sort.Direction.DESC;
-		final Sort sortBy = sortBy(desc, value);
-		final Iterable<Task> findAll = taskRepository.findAll(sortBy);
+		final Sort sortByState = sortBy(desc, state);
+		final Sort sortByDate = sortBy(desc, date);
+		final Iterable<Task> findAll = taskRepository.findAll(sortByState.and(sortByDate));
 		logger.info(TaskConstant.GET_ALL_TASK);
 		return findAll;
 	}

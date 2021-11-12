@@ -6,7 +6,7 @@ CREATE TABLE task (
   id INT AUTO_INCREMENT  PRIMARY KEY,
   title VARCHAR(55) NOT NULL,
   description VARCHAR(250),
-  created_at DATE
+  created_at VARCHAR(55)
 );
 
 -- state allows to know the state of your task. true, it is in progress. false, it is finished. 
