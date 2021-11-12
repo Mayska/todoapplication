@@ -46,5 +46,16 @@ public class TaskController {
 	public void updateStateTask(@PathVariable("id") final Long id) {
 		taskApiService.updateStateTask(id);
 	}
+	
+	/**
+	 * Find task by id
+	 * @param task id
+	 * @return
+	 */
+	@GetMapping("/findtask/{id}")
+	@ResponseBody
+	public Task getTaskById(@PathVariable("id") final Long id) {
+		return taskApiService.getTaskById(id);
+	}
 		
 }

@@ -13,31 +13,22 @@
 	    <tr>
 	      <th scope="col">Date Create</th>
 	      <th scope="col">Title</th>
-	      <th scope="col">description</th>
 	      <th scope="col">state</th>
+	      <th scope="col">Detail</th>
 	    </tr>
   	</thead>
   	<tbody>
-  	<tr th:each="task: ${taskList}" th:if=${task.state}>
-		<td th:text="${task.createdAt}"></td>
-		<td th:text="${task.title}"></td>
-		<td th:text="${task.description}"></td>
+  	<tr th:each="task: ${taskList}" >
+		<td th:text="${task.createdAt}" th:classappend="${task.state} ? '' : line"></td>
+		<td th:text="${task.title}" th:classappend="${task.state} ? '' : line"></td>
 		<td>
 			<form action="#" th:action="@{'/finishtask/' + ${task.id}}" method="get">
-				<input type="checkbox" name="todo" onChange="this.form.submit()">
-				<label for="todo">To do</label>
+				<input type="checkbox" name="todo" onChange="this.form.submit()" th:checked="${!task.state}">
+				<label for="todo" th:text="${task.state}? 'To do' : 'Finish'"></label>
 			</form>
 		</td>
-	<tr>
-	<tr th:each="task: ${taskList}" th:if=${!task.state}>
-		<td class="line" th:text="${task.createdAt}"></td>
-		<td class="line" th:text="${task.title}"></td>
-		<td class="line" th:text="${task.description}"></td>
 		<td>
-		<form action="#" th:action="@{'/finishtask/' + ${task.id}}" method="get">
-				<input type="checkbox" name="finish" onChange="this.form.submit()" checked>
-				<label for="finish">Finish</label>
-			</form>
+			<a th:href="@{'/detail/' + ${task.id}}" target="_blank">Detail task</a>
 		</td>
 	<tr>
   	</tbody>

@@ -1,7 +1,0 @@
-com\todoapplication\api\apiservice\TaskApiService.class
-com\todoapplication\api\controller\TaskController.class
-com\todoapplication\api\constant\TaskConstant.class
-com\todoapplication\api\model\Task.class
-com\todoapplication\api\repository\TaskRepository.class
-com\todoapplication\api\ApiApplication.class
-com\todoapplication\api\service\TaskService.class

@@ -40,15 +40,6 @@ public class TaskApiService {
 	}
 
 	/**
-	 * Checking the id
-	 * @param id
-	 */
-	public void updateStateTask(Long id) {
-		final Task TaskExist = checkTaskIdExist(id);
-		taskService.updateStateTask(TaskExist);
-	}
-
-	/**
 	 * Checking the id and get Task object or BAD_REQUEST
 	 * @param id
 	 * @return
@@ -56,10 +47,28 @@ public class TaskApiService {
 	private Task checkTaskIdExist(Long id) {
 		final Optional<Task> optionalTask = taskRepository.findById(id);
 		if(!optionalTask.isPresent()) {
-			String msg = TaskConstant.ERROR_TASK_ID + id;
+			final String msg = TaskConstant.ERROR_TASK_ID + id;
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msg);
 		}
 		return optionalTask.get();
 	}
 
+	/**
+	 * Checking the id
+	 * @param id
+	 * @return
+	 */
+	public Task getTaskById(Long id) {
+		final Task TaskExist = checkTaskIdExist(id);
+		return taskService.getTaskById(TaskExist);
+	}
+
+	/**
+	 * Checking the id
+	 * @param id
+	 */
+	public void updateStateTask(Long id) {
+		final Task TaskExist = checkTaskIdExist(id);
+		taskService.updateStateTask(TaskExist);
+	}
 }

@@ -1,5 +1,6 @@
 package com.todoapplication.api.repository;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.CrudRepository;
 
 import com.todoapplication.api.model.Task;
@@ -9,5 +10,7 @@ import com.todoapplication.api.model.Task;
  *
  */
 public interface TaskRepository extends CrudRepository<Task, Long>{
+	
+	 Iterable<Task> findAll(Sort sort);
 
 }
