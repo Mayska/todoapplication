@@ -45,6 +45,10 @@ public class TaskService {
 		return taskProxy.getTaskById(id);
 		
 	}
+
+	public void saveFrom(Task task) {
+		taskProxy.saveForm(task);
+	}
 	
 	
 

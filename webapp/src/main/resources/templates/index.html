@@ -27,6 +27,12 @@
 <body>
 	<div class="container-md" th:if="${taskList != null}">
 		<div th:insert="fragments/task"></div>
+		<br>
+		<a href="/formtask">Add task</a>
+    </div>
+   	<div class="container-md" th:if="${formtask != null}">
+		<div th:insert="fragments/formtask"></div>
+		<br>
     </div>
     <footer class="container-md" th:insert="footer/footer"></footer>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"

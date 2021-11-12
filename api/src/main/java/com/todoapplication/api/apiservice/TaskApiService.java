@@ -1,5 +1,6 @@
 package com.todoapplication.api.apiservice;
 
+import java.util.Date;
 import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
@@ -66,9 +67,38 @@ public class TaskApiService {
 	/**
 	 * Checking the id
 	 * @param id
+	 * @return 
 	 */
-	public void updateStateTask(Long id) {
+	public Task updateStateTask(Long id) {
 		final Task TaskExist = checkTaskIdExist(id);
-		taskService.updateStateTask(TaskExist);
+		if(TaskExist.isState()) {
+			TaskExist.setState(false);
+		}else {
+			TaskExist.setState(true);
+		}
+		return taskService.updateStateTask(TaskExist);
+	}
+
+	public Task createNewTask(Task task) {
+		final Task checkParm = checkParm(task);
+		return taskService.createNewTask(checkParm);
+	}
+
+	/**
+	 * Checking the title and creating the parameters.
+	 * @param task
+	 * @return
+	 */
+	private Task checkParm(Task task) {
+		if(task.getTitle().isEmpty()) {
+			final String msg = TaskConstant.ERROR_TASK_TITLE_EMPTY;
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msg);
+		}
+		if(task.getDescription().isEmpty()) {
+			task.setDescription("");
+		}
+		task.setState(true);
+		task.setCreatedAt(new Date());
+		return task;
 	}
 }

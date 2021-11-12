@@ -1,8 +1,12 @@
 package com.todoapplication.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -56,6 +60,15 @@ public class TaskController {
 	@ResponseBody
 	public Task getTaskById(@PathVariable("id") final Long id) {
 		return taskApiService.getTaskById(id);
+	}
+	
+
+	/**
+	 * @return
+	 */
+	@PostMapping("/newtask")
+	public Task submitNewTask(@RequestBody Task task, Model model) {
+		return taskApiService.createNewTask(task);
 	}
 		
 }

@@ -34,7 +34,6 @@ public class IndexController {
 	@GetMapping("/")
 	public String index(final Model model) {
 		Iterable<Task> taskList = taskService.getAllTask();
-		model.addAttribute("newtask", new Task());
 		model.addAttribute("taskList", taskList);
 		return "index";
 	}
@@ -75,6 +74,21 @@ public class IndexController {
 	@GetMapping("/finishtask/{id}")
     public RedirectView updateStateTask(@PathVariable final Long id, final Model model) {
 		taskService.updateStateTask(id);
+		RedirectView  redirectView = new RedirectView();
+		redirectView.setUrl("/");
+		return redirectView;
+    }
+	
+	@GetMapping("/formtask")
+	public String formNewTask(Model model) {
+		model.addAttribute("formtask", "formtask");
+		model.addAttribute("newtask", new Task());
+		return "index";
+    }
+	
+	@PostMapping("/sumbitform")
+	public RedirectView sumbitForm(@ModelAttribute Task task, Model model) {
+		taskService.saveFrom(task);
 		RedirectView  redirectView = new RedirectView();
 		redirectView.setUrl("/");
 		return redirectView;
