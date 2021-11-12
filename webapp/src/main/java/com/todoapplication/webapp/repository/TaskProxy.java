@@ -2,6 +2,7 @@ package com.todoapplication.webapp.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -28,6 +29,13 @@ public class TaskProxy {
 				new ParameterizedTypeReference<Iterable<Task>>() {
 				});
 		return response.getBody();
+	}
+
+	public void updateStateTask(Long id) {
+		String baseApiUrl = props.getApiUrl();
+		String finishTaskUrl = baseApiUrl + "/finishtask/" + id;
+		RestTemplate restTemplate = new RestTemplate();
+		restTemplate.exchange(finishTaskUrl, HttpMethod.GET, null, void.class);
 	}
 
 }

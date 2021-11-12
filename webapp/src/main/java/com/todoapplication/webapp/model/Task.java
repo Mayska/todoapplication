@@ -1,9 +1,9 @@
 package com.todoapplication.webapp.model;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class Task {
 
@@ -13,7 +13,9 @@ private Long id;
 	
 	private String description;
 
-	private OffsetDateTime createdAt;
+	private Date createdAt;
+	
+	private boolean state;
 
 	public Long getId() {
 		return id;
@@ -39,11 +41,19 @@ private Long id;
 		this.description = description;
 	}
 
-	public OffsetDateTime getCreatedAt() {
+	public boolean isState() {
+		return state;
+	}
+
+	public void setState(boolean state) {
+		this.state = state;
+	}
+
+	public Date getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(OffsetDateTime createdAt) {
+	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
 	}
 }

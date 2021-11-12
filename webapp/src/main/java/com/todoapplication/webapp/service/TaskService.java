@@ -19,9 +19,8 @@ public class TaskService {
 		return allTask;
 	}
 
-	public TaskService(TaskProxy taskProxy) {
-		super();
-		this.taskProxy = taskProxy;
+	public void updateStateTask(Long id) {
+		taskProxy.updateStateTask(id);
 	}
 	
 	

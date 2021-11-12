@@ -2,11 +2,11 @@ package com.todoapplication.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.todoapplication.api.apiservice.TaskApiService;
-import com.todoapplication.api.constant.TaskConstant;
 import com.todoapplication.api.model.Task;
 
 import lombok.extern.log4j.Log4j2;
@@ -26,12 +26,25 @@ public class TaskController {
 	@Autowired
 	private TaskApiService taskApiService;
 	
+	/**
+	 * Get all task in db
+	 * @return
+	 */
 	@GetMapping("/alltask")
 	@ResponseBody
 	public Iterable<Task> getAllTaskList() {
 		Iterable<Task> allTask = taskApiService.getAllTask();
 		return allTask;
 	}
-
+	
+	/**
+	 * Update state task finish or todo
+	 * @param task id
+	 * @return
+	 */
+	@GetMapping("/finishtask/{id}")
+	public void updateStateTask(@PathVariable("id") final Long id) {
+		taskApiService.updateStateTask(id);
+	}
 		
 }

@@ -1,6 +1,6 @@
 package com.todoapplication.api.model;
 
-import java.time.OffsetDateTime;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,10 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-
-import org.hibernate.annotations.CreationTimestamp;
-
 
 
 
@@ -33,9 +29,12 @@ public class Task {
 	
 	private String description;
 	
-	@CreationTimestamp
-	@Column(name = "created_at")
-	private OffsetDateTime createdAt;
+	// @CreationTimestamp
+	@Column(name = "created_at", updatable=false)
+	// @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	private Date createdAt;
+	
+	private boolean state; 
 
 	public Long getId() {
 		return id;
@@ -61,11 +60,19 @@ public class Task {
 		this.description = description;
 	}
 
-	public OffsetDateTime getCreatedAt() {
+	public boolean isState() {
+		return state;
+	}
+
+	public void setState(boolean state) {
+		this.state = state;
+	}
+
+	public Date getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(OffsetDateTime createdAt) {
+	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
 	}
 
