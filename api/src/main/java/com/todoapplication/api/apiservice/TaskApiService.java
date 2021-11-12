@@ -62,4 +62,9 @@ public class TaskApiService {
 		return optionalTask.get();
 	}
 
+	public Task getTaskById(Long id) {
+		final Task TaskExist = checkTaskIdExist(id);
+		return taskService.getTaskById(TaskExist);
+	}
+
 }

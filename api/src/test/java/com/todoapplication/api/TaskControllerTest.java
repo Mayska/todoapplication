@@ -46,6 +46,7 @@ public class TaskControllerTest {
 	/**
 	 * Creation of a task to do, with a title, an empty description. 
 	 * I must have a title, a empty description and a date.
+	 * Order by state
 	 * @throws Exception
 	 */
 	@Test
@@ -58,11 +59,19 @@ public class TaskControllerTest {
 		mockMvc.perform(get("/alltask"))
 		.andDo(print())
 		.andExpect(status().isOk())
-	    .andExpect(jsonPath("$[3].id", is(taskSave.getId().intValue())))
-		.andExpect(jsonPath("$[3].title", is(taskSave.getTitle())))
-		.andExpect(jsonPath("$[3].description", is(taskSave.getDescription())))
-		.andExpect(jsonPath("$[3].createdAt", is(taskSave.getCreatedAt())))
-		.andExpect(jsonPath("$[3].state", is(Boolean.TRUE)));
+	    .andExpect(jsonPath("$[0].id", is(3)))
+	    .andExpect(jsonPath("$[0].state", is(Boolean.TRUE)))
+	    .andExpect(jsonPath("$[1].id", is(4)))
+	    .andExpect(jsonPath("$[1].state", is(Boolean.TRUE)))
+	    .andExpect(jsonPath("$[1].id", is(taskSave.getId().intValue())))
+		.andExpect(jsonPath("$[1].title", is(taskSave.getTitle())))
+		.andExpect(jsonPath("$[1].description", is(taskSave.getDescription())))
+		.andExpect(jsonPath("$[1].createdAt", is(taskSave.getCreatedAt())))
+		.andExpect(jsonPath("$[1].state", is(Boolean.TRUE)))
+	    .andExpect(jsonPath("$[2].id", is(1)))
+	    .andExpect(jsonPath("$[2].state", is(Boolean.FALSE)))
+	    .andExpect(jsonPath("$[3].id", is(2)))
+	    .andExpect(jsonPath("$[3].state", is(Boolean.FALSE)));
 	}
 	
 	/**
@@ -74,8 +83,8 @@ public class TaskControllerTest {
 		final Task task = taskRepository.findById(1L).get();
 		assertTrue(task.isState());
 		mockMvc.perform(get("/finishtask/" +  task.getId()))
-        .andExpect(status().isOk())
-        .andDo(print());
+		.andDo(print())
+        .andExpect(status().isOk());
 		final Task modifyTask = taskRepository.findById(1L).get();
 		assertEquals(task.getTitle(), modifyTask.getTitle());
 		assertEquals(task.getDescription(), modifyTask.getDescription());

@@ -22,6 +22,11 @@ public class TaskService {
 	public void updateStateTask(Long id) {
 		taskProxy.updateStateTask(id);
 	}
+
+	public Task getTaskById(Long id) {
+		return taskProxy.getTaskById(id);
+		
+	}
 	
 	
 
