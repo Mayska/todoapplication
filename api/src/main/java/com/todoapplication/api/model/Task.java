@@ -30,7 +30,7 @@ public class Task {
 	private String description;
 	
 	// @CreationTimestamp
-	@Column(name = "created_at")
+	@Column(name = "created_at", updatable=false)
 	// @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date createdAt;
 	

@@ -3,6 +3,7 @@ package com.todoapplication.api;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -55,16 +56,14 @@ public class TaskControllerTest {
 		assertEquals(task.getTitle(), taskSave.getTitle());
 		assertNull(taskSave.getDescription());
 		mockMvc.perform(get("/alltask"))
-		// .andDo(print())
+		.andDo(print())
 		.andExpect(status().isOk())
 	    .andExpect(jsonPath("$[3].id", is(taskSave.getId().intValue())))
 		.andExpect(jsonPath("$[3].title", is(taskSave.getTitle())))
 		.andExpect(jsonPath("$[3].description", is(taskSave.getDescription())))
-		//.andExpect(jsonPath("$[3].createdAt", is(taskSave.getCreatedAt())))
+		.andExpect(jsonPath("$[3].createdAt", is(taskSave.getCreatedAt())))
 		.andExpect(jsonPath("$[3].state", is(Boolean.TRUE)));
 	}
-
-	
 	
 	/**
 	 * task state is true after update it is false
@@ -78,7 +77,11 @@ public class TaskControllerTest {
         .andExpect(status().isOk())
         .andDo(print());
 		final Task modifyTask = taskRepository.findById(1L).get();
+		assertEquals(task.getTitle(), modifyTask.getTitle());
+		assertEquals(task.getDescription(), modifyTask.getDescription());
+		assertEquals(task.getCreatedAt(), modifyTask.getCreatedAt());
 		assertFalse(modifyTask.isState());
+		assertNotEquals(task.isState(), modifyTask.isState());
 	}
 	
 	/**
