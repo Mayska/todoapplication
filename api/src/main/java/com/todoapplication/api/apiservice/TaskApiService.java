@@ -2,7 +2,6 @@ package com.todoapplication.api.apiservice;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
@@ -67,7 +66,7 @@ public class TaskApiService {
 	}
 
 	/**
-	 * Checking the id
+	 * Checking the id and update Task object.
 	 * @param id
 	 * @return 
 	 */
@@ -87,7 +86,7 @@ public class TaskApiService {
 	}
 
 	/**
-	 * Checking the title and creating the parameters.
+	 * Checking the title and creating Task the parameters.
 	 * @param task
 	 * @return
 	 */
@@ -96,14 +95,21 @@ public class TaskApiService {
 			final String msg = TaskConstant.ERROR_TASK_TITLE_EMPTY;
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msg);
 		}
+		if(task.getTitle().length() > 50){
+			final String msg = TaskConstant.ERROR_TASK_TITLE_LONG;
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msg);
+		}
 		if(task.getDescription().isEmpty()) {
-			task.setDescription("");
+			task.setDescription(TaskConstant.EMPTY);
+		}
+		if(task.getDescription().length() > 250){
+			final String msg = TaskConstant.ERROR_TASK_DESCRIPTION_LONG;
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msg);
 		}
 		task.setState(true);
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TaskConstant.PATTERNE_DATE);
 		OffsetDateTime now = OffsetDateTime.now();
 		task.setCreatedAt(now.format(formatter));
-		// task.setCreatedAt(new Date());
 		return task;
 	}
 }

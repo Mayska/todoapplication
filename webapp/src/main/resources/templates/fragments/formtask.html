@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>New task</title>
+</head>
+<body>
+	<h1>Form new task</h1>
+	
+<form method="post" action="#" th:action="@{/sumbitform}" th:object="${newtask}">
+	<div class="mb-3">
+		<label for="titletask" class="form-label">Title task</label>
+		<input type="text" th:field="*{title}" class="form-control" id="title" maxlength="50" required="required">
+	</div>
+	<br>
+	<div class="mb-3">
+		<label for="description" class="form-label">Description task</label>
+		<input type="text" th:field="*{description}" class="form-control" id="description" maxlength="250">
+	</div>
+	<br>
+	<button type="submit" class="btn btn-primary">Submit</button>
+</form>	
+	<br>
+<div class="container-md" th:if="${errorlist !=null}">
+	<div th:each="error: ${errorlist}">
+		<p th:text=${error} style="color: red;"></p>
+		<br>
+	</div>
+</div>
+</body>
+</html>

@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.time.OffsetDateTime;
 import java.util.Date;
+import java.util.Iterator;
 
 import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeAll;
@@ -101,7 +102,7 @@ public class TaskControllerTest {
 		final Task modifyTask = taskRepository.findById(newTask.getId()).get();
 		assertEquals(task.getTitle(), modifyTask.getTitle());
 		assertEquals(task.getDescription(), modifyTask.getDescription());
-		//assertEquals(task.getCreatedAt(), modifyTask.getCreatedAt());
+		assertEquals(task.getCreatedAt(), modifyTask.getCreatedAt());
 		assertFalse(modifyTask.isState());
 		assertNotEquals(task.isState(), modifyTask.isState());
 		taskRepository.delete(modifyTask);
@@ -169,11 +170,54 @@ public class TaskControllerTest {
                 .andExpect(status().isOk());
 	}
 	
+	/**
+	 * 
+	 * @throws Exception
+	 */
 	@Test
 	public void TestSubmitTask_titleEmpty() throws Exception {
 		final String msgError = TaskConstant.ERROR_TASK_TITLE_EMPTY;
 		final Task newTask = newTask(null, null);
         String writeValueAsString = new ObjectMapper().writeValueAsString(newTask);
+		this.mockMvc.perform(post("/newtask")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(writeValueAsString))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(status().reason(msgError));
+	}
+	
+	/**
+	 * Title (51 characters) is too long.
+	 * @throws Exception
+	 */
+	@Test
+	public void TestSubmitTask_titleFieldIsLong() throws Exception {
+		String title = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+		String msgError = TaskConstant.ERROR_TASK_TITLE_LONG;
+		final Task newTask = newTask(title, null);
+		String writeValueAsString = new ObjectMapper().writeValueAsString(newTask);
+		this.mockMvc.perform(post("/newtask")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(writeValueAsString))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(status().reason(msgError));
+	}  
+	
+	/**
+	 * Description (251 characters) is too long.
+	 * @throws Exception
+	 */
+	@Test
+	public void TestSubmitTask_descriptionFieldIsLong() throws Exception {
+		String description = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+		for (int i=0; i < 4; i++ ) {
+			description = description + description;
+		}
+		String msgError = TaskConstant.ERROR_TASK_DESCRIPTION_LONG;
+		final Task newTask = newTask("Mon titre", description);
+		String writeValueAsString = new ObjectMapper().writeValueAsString(newTask);
 		this.mockMvc.perform(post("/newtask")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(writeValueAsString))
