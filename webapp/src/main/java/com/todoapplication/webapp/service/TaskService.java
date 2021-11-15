@@ -6,8 +6,6 @@ import org.springframework.stereotype.Service;
 import com.todoapplication.webapp.model.Task;
 import com.todoapplication.webapp.repository.TaskProxy;
 
-import lombok.Data;
-
 /**
  * Service
  * @author pc

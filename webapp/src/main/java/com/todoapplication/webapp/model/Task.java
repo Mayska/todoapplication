@@ -1,7 +1,5 @@
 package com.todoapplication.webapp.model;
 
-import java.util.Date;
-
 /**
  * Model Task
  * @author pc

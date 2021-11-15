@@ -4,8 +4,6 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -24,7 +22,6 @@ import com.todoapplication.api.service.TaskService;
 @Service
 public class TaskApiService {
 	
-	private static final Logger logger = LogManager.getLogger(TaskApiService.class);
 
 	@Autowired
 	private TaskService taskService;
@@ -80,6 +77,11 @@ public class TaskApiService {
 		return taskService.updateStateTask(TaskExist);
 	}
 
+	/**
+	 * Create new Task if param is valid
+	 * @param task
+	 * @return
+	 */
 	public Task createNewTask(Task task) {
 		final Task checkParm = checkParm(task);
 		return taskService.createNewTask(checkParm);

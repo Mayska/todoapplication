@@ -1,7 +1,5 @@
 package com.todoapplication.api.service;
 
-import java.util.Date;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +71,11 @@ public class TaskService {
 		return task;
 	}
 
+	/**
+	 * Save new task in DB
+	 * @param task
+	 * @return
+	 */
 	public Task createNewTask(Task task) {
 		final Task saveTask = taskRepository.save(task);
 		logger.info(TaskConstant.CREATE_TASK + saveTask.getId());
