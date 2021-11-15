@@ -11,9 +11,36 @@
 	<table class="table">
 	<thead>
 	    <tr>
-	      <th scope="col">Date Create</th>
-	      <th scope="col">Title</th>
-	      <th scope="col">state</th>
+	    <th scope="col">
+    	<form action="#" th:action="@{/orderby}" method="get">
+	    	<input type="hidden" name="column" value="createdAt" />
+		    	<label for="date_create">Date create</label>
+		    	<select id="date_create" name="order" class="form-select" onchange="this.form.submit()">
+			    	<option value="asc">Up</option>
+			    	<option value="desc">Down</option>
+	    	</select>
+		</form>
+		</th>
+	      <th scope="col">
+	      <form action="#" th:action="@{/orderby}" method="get">
+		      <input type="hidden" name="column" value="title" />
+		      <label for="title">Title</label>
+		      <select id="title" name="order" class="form-select" onchange="this.form.submit()">
+			      <option value="asc">Up</option>
+			      <option value="desc">Down</option>
+	      </select>
+	      </form>
+	      </th>
+	      <th scope="col">
+	      <form action="#" th:action="@{/orderby}" method="get">
+			  <input type="hidden" name="column" value="state" />
+			  <label for="state">State</label>
+			  <select id="state" name="order" class="form-select" onchange="this.form.submit()">
+				  <option value="asc">Up</option>
+				  <option value="desc">Down</option>
+			  </select>
+		  </form>
+	      </th>
 	      <th scope="col">Detail</th>
 	    </tr>
   	</thead>

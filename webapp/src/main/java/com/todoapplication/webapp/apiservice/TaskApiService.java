@@ -3,8 +3,11 @@ package com.todoapplication.webapp.apiservice;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import com.todoapplication.api.constant.TaskConstant;
 import com.todoapplication.webapp.model.Task;
 import com.todoapplication.webapp.service.TaskService;
 
@@ -75,6 +78,30 @@ public class TaskApiService {
 	 */
 	public void updateStateTask(Long id) {
 		taskService.updateStateTask(id);
+	}
+
+	public void orderBy(String column, String order) {
+		boolean checkParamColumn = checkParamColumn(column);
+		boolean checkParamOrder = checkParamOrder(order);
+		if(checkParamColumn && checkParamOrder) {
+			System.out.println("C'est OK");
+		}
+	}
+
+	private boolean checkParamColumn(String column) {
+		boolean checkParam = false;
+		if("createdAt".equals(column)||"title".equals(column)||"state".equals(column)) {
+			checkParam = true;
+		}
+		return checkParam;
+	}
+
+	private boolean checkParamOrder(String order) {
+		boolean checkParam = false;
+		if("desc".equals(order)||"asc".equals(order)) {
+			checkParam = true;
+		}
+		return checkParam;
 	}
 	
 	
