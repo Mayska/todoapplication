@@ -17,9 +17,6 @@ import com.todoapplication.webapp.service.TaskService;
 @Service
 public class TaskApiService {
 	
-	
-	
-	
 	@Autowired
 	private TaskService taskService;
 
@@ -53,6 +50,31 @@ public class TaskApiService {
 			listErreur.add("Decription too long (250)");
 		}
 		return listErreur;
+	}
+
+	/**
+	 * get all task.
+	 * @return
+	 */
+	public Iterable<Task> getAllTask() {
+		return taskService.getAllTask();
+	}
+
+	/**
+	 * get task by id in parm
+	 * @param id
+	 * @return
+	 */
+	public Task getTaskById(Long id) {
+		return taskService.getTaskById(id);
+	}
+
+	/**
+	 * Update task by id in parm
+	 * @param id
+	 */
+	public void updateStateTask(Long id) {
+		taskService.updateStateTask(id);
 	}
 	
 	

@@ -26,9 +26,6 @@ import com.todoapplication.webapp.service.TaskService;
 public class IndexController {
 	
 	@Autowired
-	private TaskService taskService;
-	
-	@Autowired
 	private TaskApiService taskApiService;
 
 	/**
@@ -38,7 +35,7 @@ public class IndexController {
 	 */
 	@GetMapping("/")
 	public String index(final Model model) {
-		Iterable<Task> taskList = taskService.getAllTask();
+		Iterable<Task> taskList = taskApiService.getAllTask();
 		model.addAttribute("taskList", taskList);
 		return "index";
 	}
@@ -53,7 +50,7 @@ public class IndexController {
 	@GetMapping("/detail/{id}")
 	public RedirectView detailTaskById(@PathVariable final Long id, final RedirectAttributes redirectAttributes) {
 		final RedirectView redirectView = new RedirectView("/detail", true);
-		final Task task = taskService.getTaskById(id);
+		final Task task = taskApiService.getTaskById(id);
 		redirectAttributes.addFlashAttribute("task", task);
 		return redirectView;
 	}
@@ -78,7 +75,7 @@ public class IndexController {
 	 */
 	@GetMapping("/finishtask/{id}")
     public RedirectView updateStateTask(@PathVariable final Long id, final Model model) {
-		taskService.updateStateTask(id);
+		taskApiService.updateStateTask(id);
 		RedirectView  redirectView = new RedirectView();
 		redirectView.setUrl("/");
 		return redirectView;
