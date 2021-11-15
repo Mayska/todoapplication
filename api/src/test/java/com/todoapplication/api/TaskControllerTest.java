@@ -12,8 +12,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeAll;
@@ -21,7 +23,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -63,7 +67,6 @@ public class TaskControllerTest {
 	 * @throws Exception
 	 */
 	@Test
-	
 	public void TestGetAllTask_InsertTaskInDb() throws Exception {
 		final Task task0 = newTask("Title 0",null);
 		final Task taskSave0 = taskApiService.createNewTask(task0);
@@ -76,7 +79,7 @@ public class TaskControllerTest {
 		final Task updateStateTask0 = taskApiService.updateStateTask(taskSave0.getId());
 		final Task updateStateTask3 = taskApiService.updateStateTask(taskSave3.getId());
 		mockMvc.perform(get("/alltask"))
-		.andDo(print())
+		//.andDo(print())
 		.andExpect(status().isOk())
 	    .andExpect(jsonPath("$[0].id", is(taskSave1.getId().intValue())))
 	    .andExpect(jsonPath("$[0].state", is(true)))
@@ -133,7 +136,7 @@ public class TaskControllerTest {
 		final Task taskSave = taskApiService.createNewTask(task);
 		String createdAt = taskSave.getCreatedAt();
 		mockMvc.perform(get("/findtask/{id}", taskSave.getId()))
-		.andDo(print())
+		//.andDo(print())
 	    .andExpect(jsonPath("$.id", is(taskSave.getId().intValue())))
 		.andExpect(jsonPath("$.title", is(taskSave.getTitle())))
 		.andExpect(jsonPath("$.description", is(taskSave.getDescription())))
@@ -150,9 +153,9 @@ public class TaskControllerTest {
 	public void TestGetTaskById_findTaskWithBadId() throws Exception {
 		final String msgError = TaskConstant.ERROR_TASK_ID + ID;
 		mockMvc.perform(get("/findtask/{id}", ID))
+		//.andDo(print())
         .andExpect(status().isBadRequest())
-        .andExpect(status().reason(msgError))
-        .andDo(print());
+        .andExpect(status().reason(msgError));
 	}
 	
 	/**
@@ -164,10 +167,10 @@ public class TaskControllerTest {
 		final Task newTask = newTask("Mon titre","Ma description");
         String writeValueAsString = new ObjectMapper().writeValueAsString(newTask);
         this.mockMvc.perform(post("/newtask")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(writeValueAsString))
-                .andDo(print())
-                .andExpect(status().isOk());
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(writeValueAsString))
+            //.andDo(print())
+            .andExpect(status().isOk());
 	}
 	
 	/**
@@ -180,11 +183,11 @@ public class TaskControllerTest {
 		final Task newTask = newTask(null, null);
         String writeValueAsString = new ObjectMapper().writeValueAsString(newTask);
 		this.mockMvc.perform(post("/newtask")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(writeValueAsString))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(status().reason(msgError));
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(writeValueAsString))
+            //.andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(status().reason(msgError));
 	}
 	
 	/**
@@ -198,11 +201,11 @@ public class TaskControllerTest {
 		final Task newTask = newTask(title, null);
 		String writeValueAsString = new ObjectMapper().writeValueAsString(newTask);
 		this.mockMvc.perform(post("/newtask")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(writeValueAsString))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(status().reason(msgError));
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(writeValueAsString))
+            //.andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(status().reason(msgError));
 	}  
 	
 	/**
@@ -219,11 +222,42 @@ public class TaskControllerTest {
 		final Task newTask = newTask("Mon titre", description);
 		String writeValueAsString = new ObjectMapper().writeValueAsString(newTask);
 		this.mockMvc.perform(post("/newtask")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(writeValueAsString))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(status().reason(msgError));
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(writeValueAsString))
+            //.andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(status().reason(msgError));
+	}
+	
+	/**
+	 * my new task is at the top of the list.
+	 * @throws Exception
+	 */
+	@Test
+	@Sql("/task-data.sql")
+	public void TestSubmitTask_newTaskTopList() throws Exception {
+		final Task newTask = newTask("new title", "new description");
+		taskApiService.createNewTask(newTask);
+		List<Task> taskList = new ArrayList<Task>();
+		Iterable<Task> allTask = taskApiService.getAllTask();
+		for (Task mytask : allTask) {
+			taskList.add(mytask);
+		}
+		Task task = taskList.get(0);
+		String writeValueAsString = new ObjectMapper().writeValueAsString(newTask);
+		this.mockMvc.perform(post("/newtask")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(writeValueAsString))
+            //.andDo(print())
+            .andExpect(status().is(200));
+		mockMvc.perform(get("/alltask"))
+			//.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$[0].id", is(task.getId().intValue())))
+			.andExpect(jsonPath("$[0].title", is(task.getTitle())))
+			.andExpect(jsonPath("$[0].description", is(task.getDescription())))
+			.andExpect(jsonPath("$[0].createdAt", is(task.getCreatedAt())))
+			.andExpect(jsonPath("$[0].state", is(task.isState())));
 	}
 	
 	/**

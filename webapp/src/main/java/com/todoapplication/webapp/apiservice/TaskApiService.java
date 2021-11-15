@@ -28,10 +28,10 @@ public class TaskApiService {
 	 * @param task
 	 * @return
 	 */
-	public ArrayList<String> saveFrom(Task task) {
+	public ArrayList<String> saveNewTask(Task task) {
 		ArrayList<String> error = checkTaskParametres(task);
 		if(error.isEmpty()) {			
-			taskService.saveFrom(task);
+			taskService.saveNewTask(task);
 		}
 		return error;
 	}

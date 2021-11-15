@@ -95,7 +95,7 @@ public class IndexController {
 	
 	@PostMapping("/sumbitform")
 	public RedirectView sumbitForm(@ModelAttribute Task task, Model model,final RedirectAttributes redirectAttributes) {
-		ArrayList<String> error = taskApiService.saveFrom(task);
+		ArrayList<String> error = taskApiService.saveNewTask(task);
 		final RedirectView redirectView = new RedirectView();
 		if(!error.isEmpty()) {
 			redirectView.setUrl("/formtask");

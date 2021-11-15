@@ -64,6 +64,7 @@ public class TaskController {
 	
 
 	/**
+	 * Submit form and create new task.
 	 * @return
 	 */
 	@PostMapping("/newtask")

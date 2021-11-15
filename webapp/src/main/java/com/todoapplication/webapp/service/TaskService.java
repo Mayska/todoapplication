@@ -46,10 +46,8 @@ public class TaskService {
 		
 	}
 
-	public void saveFrom(Task task) {
+	public void saveNewTask(Task task) {
 		taskProxy.saveForm(task);
 	}
-	
-	
 
 }
