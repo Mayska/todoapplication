@@ -1,5 +1,7 @@
 package com.todoapplication.api.service;
 
+import java.util.Date;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +32,12 @@ public class TaskService {
 	 * @return
 	 */
 	public Iterable<Task> getAllTask() {
-		String value = "state";
+		String state = "state";
+		String date = "createdAt";
 		final Direction desc = Sort.Direction.DESC;
-		final Sort sortBy = sortBy(desc, value);
-		final Iterable<Task> findAll = taskRepository.findAll(sortBy);
+		final Sort sortByState = sortBy(desc, state);
+		final Sort sortByDate = sortBy(desc, date);
+		final Iterable<Task> findAll = taskRepository.findAll(sortByState.and(sortByDate));
 		logger.info(TaskConstant.GET_ALL_TASK);
 		return findAll;
 	}
@@ -41,15 +45,12 @@ public class TaskService {
 	/**
 	 * Update state 
 	 * @param task
+	 * @return 
 	 */
-	public void updateStateTask(Task task) {
-		if(task.isState()) {
-			task.setState(false);
-		}else {
-			task.setState(true);
-		}
+	public Task updateStateTask(Task task) {
 		final Task saveTask = taskRepository.save(task);
 		logger.info(TaskConstant.UPDATE_TASK_STATE + saveTask.getId());
+		return saveTask;
 	}
 	
 	/**
@@ -71,6 +72,13 @@ public class TaskService {
 		logger.info(TaskConstant.GET_TASK_ID + task.getId());
 		return task;
 	}
+
+	public Task createNewTask(Task task) {
+		final Task saveTask = taskRepository.save(task);
+		logger.info(TaskConstant.CREATE_TASK + saveTask.getId());
+		return saveTask;
+	}
+
 	
 
 }

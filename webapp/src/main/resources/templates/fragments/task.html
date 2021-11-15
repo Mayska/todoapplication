@@ -20,7 +20,7 @@
   	<tbody>
   	<tr th:each="task: ${taskList}" >
 		<td th:text="${task.createdAt}" th:classappend="${task.state} ? '' : line"></td>
-		<td th:text="${task.title}" th:classappend="${task.state} ? '' : line"></td>
+		<td th:id="${task.id}" th:text="${task.title}" th:classappend="${task.state} ? '' : line"></td>
 		<td>
 			<form action="#" th:action="@{'/finishtask/' + ${task.id}}" method="get">
 				<input type="checkbox" name="todo" onChange="this.form.submit()" th:checked="${!task.state}">

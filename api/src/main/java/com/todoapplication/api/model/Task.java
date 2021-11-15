@@ -1,7 +1,5 @@
 package com.todoapplication.api.model;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,10 +27,8 @@ public class Task {
 	
 	private String description;
 	
-	// @CreationTimestamp
 	@Column(name = "created_at", updatable=false)
-	// @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Date createdAt;
+	private String createdAt;
 	
 	private boolean state; 
 
@@ -68,13 +64,15 @@ public class Task {
 		this.state = state;
 	}
 
-	public Date getCreatedAt() {
+	public String getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(Date createdAt) {
+	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
 	}
+
+
 
 
 

@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -69,6 +70,16 @@ public class TaskProxy {
 				});
 		logger.info("Call api back-end getTaskById() [ID] : {0}",  id);
 		return response.getBody();
+		
+	}
+
+	public void saveForm(Task task) {
+		String baseApiUrl = props.getApiUrl();
+		String saveTaskUrl = baseApiUrl + "/newtask";
+		RestTemplate restTemplate = new RestTemplate();
+		final HttpEntity<Task> httpEntity = new HttpEntity<Task>(task);
+		logger.info("Call api back-end saveForm");
+		restTemplate.exchange(saveTaskUrl, HttpMethod.POST, httpEntity, Task.class);
 		
 	}
 

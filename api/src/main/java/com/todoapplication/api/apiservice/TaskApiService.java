@@ -1,5 +1,7 @@
 package com.todoapplication.api.apiservice;
 
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
@@ -64,11 +66,50 @@ public class TaskApiService {
 	}
 
 	/**
-	 * Checking the id
+	 * Checking the id and update Task object.
 	 * @param id
+	 * @return 
 	 */
-	public void updateStateTask(Long id) {
+	public Task updateStateTask(Long id) {
 		final Task TaskExist = checkTaskIdExist(id);
-		taskService.updateStateTask(TaskExist);
+		if(TaskExist.isState()) {
+			TaskExist.setState(false);
+		}else {
+			TaskExist.setState(true);
+		}
+		return taskService.updateStateTask(TaskExist);
+	}
+
+	public Task createNewTask(Task task) {
+		final Task checkParm = checkParm(task);
+		return taskService.createNewTask(checkParm);
+	}
+
+	/**
+	 * Checking the title and creating Task the parameters.
+	 * @param task
+	 * @return
+	 */
+	private Task checkParm(Task task) {
+		if(task.getTitle().isEmpty()) {
+			final String msg = TaskConstant.ERROR_TASK_TITLE_EMPTY;
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msg);
+		}
+		if(task.getTitle().length() > 50){
+			final String msg = TaskConstant.ERROR_TASK_TITLE_LONG;
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msg);
+		}
+		if(task.getDescription().isEmpty()) {
+			task.setDescription(TaskConstant.EMPTY);
+		}
+		if(task.getDescription().length() > 250){
+			final String msg = TaskConstant.ERROR_TASK_DESCRIPTION_LONG;
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msg);
+		}
+		task.setState(true);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TaskConstant.PATTERNE_DATE);
+		OffsetDateTime now = OffsetDateTime.now();
+		task.setCreatedAt(now.format(formatter));
+		return task;
 	}
 }

@@ -1,5 +1,8 @@
 package com.todoapplication.webapp.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,10 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.todoapplication.webapp.apiservice.TaskApiService;
 import com.todoapplication.webapp.model.Task;
 import com.todoapplication.webapp.service.TaskService;
 
@@ -25,6 +28,9 @@ public class IndexController {
 	
 	@Autowired
 	private TaskService taskService;
+	
+	@Autowired
+	private TaskApiService taskApiService;
 
 	/**
 	 * Get index page and displays all tasks.
@@ -34,7 +40,6 @@ public class IndexController {
 	@GetMapping("/")
 	public String index(final Model model) {
 		Iterable<Task> taskList = taskService.getAllTask();
-		model.addAttribute("newtask", new Task());
 		model.addAttribute("taskList", taskList);
 		return "index";
 	}
@@ -77,6 +82,27 @@ public class IndexController {
 		taskService.updateStateTask(id);
 		RedirectView  redirectView = new RedirectView();
 		redirectView.setUrl("/");
+		return redirectView;
+    }
+	
+	@GetMapping("/formtask")
+	public String formNewTask(Model model, @ModelAttribute("errorlist") ArrayList<String> errorlist) {
+		model.addAttribute("formtask", "formtask");
+		model.addAttribute("newtask", new Task());
+		model.addAttribute("errorlist", errorlist);
+		return "index";
+    }
+	
+	@PostMapping("/sumbitform")
+	public RedirectView sumbitForm(@ModelAttribute Task task, Model model,final RedirectAttributes redirectAttributes) {
+		ArrayList<String> error = taskApiService.saveNewTask(task);
+		final RedirectView redirectView = new RedirectView();
+		if(!error.isEmpty()) {
+			redirectView.setUrl("/formtask");
+			redirectAttributes.addFlashAttribute("errorlist", error);
+		}else {			
+			redirectView.setUrl("/");
+		}
 		return redirectView;
     }
 }

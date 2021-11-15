@@ -5,35 +5,44 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" 
 	rel="stylesheet" 
 	integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" 
 	crossorigin="anonymous">
 
-<title>ToDo</title>
+<title>Detail task</title>
 
 <style>
 	body {
 		padding-top: 50px;
 	}
 	
-	.line {
-	  text-decoration: line-through;
+	.italic {
+  		font-style: italic;
 	}
+	
 	
 </style>
 </head>
 <body>
-	<div class="container-md" th:if="${taskList != null}">
-		<div th:insert="fragments/task"></div>
-		<br>
-		<a href="/formtask">Add task</a>
-    </div>
-   	<div class="container-md" th:if="${formtask != null}">
-		<div th:insert="fragments/formtask"></div>
-		<br>
-    </div>
+	<div class="container-md">
+		<div class="card" style="width: 18rem;">
+		  	<div class="card-body">
+			  	<div class="card-header">
+			    	<h5 th:text="${mytask.title}"></h5>
+		    	</div>
+		    	<br>
+		    	<span class="italic">Create :</span>
+		    	<h6 class="card-subtitle mb-2 text-muted" th:text="${mytask.createdAt}"></h6>
+		    	<br>
+		    	<span class="italic">Description :</span>
+		    	<p th:text="${mytask.description}"></p>
+		    	<br>
+		    	<span class="italic">State :</span>
+		    	<p th:text="${task.state}? 'You must Todo' : 'Is Finish'"></p>
+		 	</div>
+		</div>
+	</div>
     <footer class="container-md" th:insert="footer/footer"></footer>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
 			integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" 
