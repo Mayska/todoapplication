@@ -34,8 +34,8 @@ class IndexControllerTest {
 	 */
 	@BeforeAll public void initialize() throws Exception {
 			Task task = new Task();
-			task.setTitle("My title");
-			task.setDescription("My description");
+			task.setTitle("title");
+			task.setDescription("my description");
 			task.setState(true);
 			taskApiService.saveNewTask(task);
 	  }

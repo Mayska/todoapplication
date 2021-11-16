@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.todoapplication.webapp.apiservice.TaskApiService;
 import com.todoapplication.webapp.model.Task;
-import com.todoapplication.webapp.service.TaskService;
 
 
 /**
@@ -42,7 +42,7 @@ public class IndexController {
 	
 	
 	/**
-	 * Returns task by id to url: '/detail'.
+	 * Displays task by id to url: '/detail'.
 	 * @param id
 	 * @param redirectAttributes
 	 * @return
@@ -81,6 +81,12 @@ public class IndexController {
 		return redirectView;
     }
 	
+	/**
+	 * Displays the form or data errors
+	 * @param model
+	 * @param errorlist
+	 * @return
+	 */
 	@GetMapping("/formtask")
 	public String formNewTask(Model model, @ModelAttribute("errorlist") ArrayList<String> errorlist) {
 		model.addAttribute("formtask", "formtask");
@@ -89,6 +95,13 @@ public class IndexController {
 		return "index";
     }
 	
+	/**
+	 * Checks and validates the form for the creation of a new task.
+	 * @param task
+	 * @param model
+	 * @param redirectAttributes
+	 * @return
+	 */
 	@PostMapping("/sumbitform")
 	public RedirectView sumbitForm(@ModelAttribute Task task, Model model,final RedirectAttributes redirectAttributes) {
 		ArrayList<String> error = taskApiService.saveNewTask(task);
@@ -100,5 +113,20 @@ public class IndexController {
 			redirectView.setUrl("/");
 		}
 		return redirectView;
+    }
+	
+	
+	/**
+	 * Change the display order of the task table.
+	 * @param column
+	 * @param order
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("/orderby")
+	public String orderBy(@RequestParam("column") String column, @RequestParam("order") String order, final Model model) {
+		Iterable<Task> taskList = taskApiService.orderBy(column, order);
+		model.addAttribute("taskList", taskList);
+		return "index";
     }
 }
