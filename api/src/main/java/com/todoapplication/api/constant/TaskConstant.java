@@ -26,6 +26,8 @@ public final class TaskConstant {
 	
 	public static final String ERROR_TASK_DESCRIPTION_LONG = "The field description is too long.";
 	
+	public static final String ERROR_PARAM_URL = "Parameters are incorrect.";
+	
 	public static final String EMPTY = "";
 	
 	public static final String column = "";

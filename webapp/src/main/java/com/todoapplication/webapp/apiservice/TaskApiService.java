@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.todoapplication.api.constant.TaskConstant;
 import com.todoapplication.webapp.model.Task;
 import com.todoapplication.webapp.service.TaskService;
 
@@ -80,22 +79,40 @@ public class TaskApiService {
 		taskService.updateStateTask(id);
 	}
 
-	public void orderBy(String column, String order) {
+	/**
+	 * Check param values and get order by back-end. 
+	 * @param column
+	 * @param order
+	 * @return
+	 */
+	public Iterable<Task> orderBy(String column, String order) {
 		boolean checkParamColumn = checkParamColumn(column);
 		boolean checkParamOrder = checkParamOrder(order);
-		if(checkParamColumn && checkParamOrder) {
-			System.out.println("C'est OK");
+		if(!checkParamColumn && !checkParamOrder) {
+			final String msg = "Parameters are incorrect.";
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msg);
 		}
+		return taskService.getColumnOrderBy(column,order);
 	}
 
+	/**
+	 * Check column value title or createdAt. 
+	 * @param order
+	 * @return
+	 */
 	private boolean checkParamColumn(String column) {
 		boolean checkParam = false;
-		if("createdAt".equals(column)||"title".equals(column)||"state".equals(column)) {
+		if("createdAt".equals(column)||"title".equals(column)) {
 			checkParam = true;
 		}
 		return checkParam;
 	}
 
+	/**
+	 * Check order value desc or asc. 
+	 * @param order
+	 * @return
+	 */
 	private boolean checkParamOrder(String order) {
 		boolean checkParam = false;
 		if("desc".equals(order)||"asc".equals(order)) {

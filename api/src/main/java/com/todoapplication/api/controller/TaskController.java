@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -65,6 +66,19 @@ public class TaskController {
 	@PostMapping("/newtask")
 	public Task submitNewTask(@RequestBody Task task, Model model) {
 		return taskApiService.createNewTask(task);
+	}
+	
+	
+	/**
+	 * Update state task finish or todo
+	 * @param task id
+	 * @return 
+	 * @return
+	 */
+	@GetMapping("/orderby")
+	@ResponseBody
+	public Iterable<Task> orderBy(@RequestParam("column") String column, @RequestParam("order") String order) {
+		return taskApiService.getOrderByParam(column, order);
 	}
 		
 }

@@ -253,6 +253,107 @@ public class TaskControllerTest {
 	}
 	
 	/**
+	 * Error check with wrong parameters. 
+	 * @throws Exception
+	 */
+	@Test
+	public void TestOrderBy_checkErrorWrongParam() throws Exception {
+		String msgError = TaskConstant.ERROR_PARAM_URL;
+		String title = "foo";
+		String asc = "bar";
+		mockMvc.perform(get("/orderby")
+		.param("column", title)
+		.param("order", asc))
+		//.andDo(print())
+		.andExpect(status().isBadRequest())
+		.andExpect(status().reason(msgError));
+	}
+	
+	
+	/**
+	 * Get task order by title asc. 
+	 * @throws Exception
+	 */
+	@Test
+	@Sql("/task-data-orderby.sql")
+	public void TestOrderBy_checkOrderTitleAsc() throws Exception {
+		String title = "title";
+		String asc = "asc";
+		mockMvc.perform(get("/orderby")
+		.param("column", title)
+		.param("order", asc))
+		//.andDo(print())
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$[0].title", is("1")))
+		.andExpect(jsonPath("$[0].state", is(true)))
+		.andExpect(jsonPath("$[1].title", is("1234")))
+		.andExpect(jsonPath("$[1].state", is(true)))
+		.andExpect(jsonPath("$[2].title", is("62")))
+		.andExpect(jsonPath("$[2].state", is(true)))
+		.andExpect(jsonPath("$[3].title", is("a")))
+		.andExpect(jsonPath("$[3].state", is(true)))
+		.andExpect(jsonPath("$[4].title", is("a12")))
+		.andExpect(jsonPath("$[4].state", is(true)))
+		.andExpect(jsonPath("$[5].title", is("aa")))
+		.andExpect(jsonPath("$[5].state", is(true)))
+		.andExpect(jsonPath("$[6].title", is("b")))
+		.andExpect(jsonPath("$[6].state", is(true)))
+		.andExpect(jsonPath("$[7].title", is("bac")))
+		.andExpect(jsonPath("$[7].state", is(true)))
+		.andExpect(jsonPath("$[8].title", is("ab")))
+		.andExpect(jsonPath("$[8].state", is(false)))
+		.andExpect(jsonPath("$[9].title", is("azerty")))
+		.andExpect(jsonPath("$[9].state", is(false)))
+		.andExpect(jsonPath("$[10].title", is("rr")))
+		.andExpect(jsonPath("$[10].state", is(false)))
+		.andExpect(jsonPath("$[11].title", is("yu78")))
+		.andExpect(jsonPath("$[11].state", is(false)));
+	}
+	
+	
+	/**
+	 * Get task order by title desc. 
+	 * @throws Exception
+	 */
+	@Test
+	@Sql("/task-data-orderby.sql")
+	public void TestOrderBy_checkOrderTitleDesc() throws Exception {
+		String title = "title";
+		String asc = "desc";
+		mockMvc.perform(get("/orderby")
+		.param("column", title)
+		.param("order", asc))
+		//.andDo(print())
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$[0].title", is("bac")))
+		.andExpect(jsonPath("$[0].state", is(true)))
+		.andExpect(jsonPath("$[1].title", is("b")))
+		.andExpect(jsonPath("$[1].state", is(true)))
+		.andExpect(jsonPath("$[2].title", is("aa")))
+		.andExpect(jsonPath("$[2].state", is(true)))
+		.andExpect(jsonPath("$[3].title", is("a12")))
+		.andExpect(jsonPath("$[3].state", is(true)))
+		.andExpect(jsonPath("$[4].title", is("a")))
+		.andExpect(jsonPath("$[4].state", is(true)))
+		.andExpect(jsonPath("$[5].title", is("62")))
+		.andExpect(jsonPath("$[5].state", is(true)))
+		.andExpect(jsonPath("$[6].title", is("1234")))
+		.andExpect(jsonPath("$[6].state", is(true)))
+		.andExpect(jsonPath("$[7].title", is("1")))
+		.andExpect(jsonPath("$[7].state", is(true)))
+		.andExpect(jsonPath("$[8].title", is("yu78")))
+		.andExpect(jsonPath("$[8].state", is(false)))
+		.andExpect(jsonPath("$[9].title", is("rr")))
+		.andExpect(jsonPath("$[9].state", is(false)))
+		.andExpect(jsonPath("$[10].title", is("azerty")))
+		.andExpect(jsonPath("$[10].state", is(false)))
+		.andExpect(jsonPath("$[11].title", is("ab")))
+		.andExpect(jsonPath("$[11].state", is(false)))
+		;
+	}
+	
+	
+	/**
 	 * Create Task
 	 * @param title
 	 * @param description

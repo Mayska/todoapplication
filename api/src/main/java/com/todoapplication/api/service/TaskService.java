@@ -82,6 +82,22 @@ public class TaskService {
 		return saveTask;
 	}
 
+	/**
+	 * Return list of task by order param 
+	 * @param column
+	 * @param order
+	 * @return
+	 */
+	public Iterable<Task> getColumnOrderBy(String column, String order) {
+		Direction orderBy = Sort.Direction.DESC;
+		final Sort sortByState = sortBy(orderBy, "state");
+		if("asc".equals(order)) {
+			orderBy = Sort.Direction.ASC;
+		}
+		Sort sortBy = sortBy(orderBy,column);
+		return taskRepository.findAll(sortByState.and(sortBy));
+	}
+
 	
 
 }

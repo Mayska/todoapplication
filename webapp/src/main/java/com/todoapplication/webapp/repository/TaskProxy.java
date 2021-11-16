@@ -73,6 +73,10 @@ public class TaskProxy {
 		
 	}
 
+	/**
+	 * Send request submitNewTask(task). 
+	 * @param task
+	 */
 	public void saveForm(Task task) {
 		String baseApiUrl = props.getApiUrl();
 		String saveTaskUrl = baseApiUrl + "/newtask";
@@ -80,6 +84,24 @@ public class TaskProxy {
 		final HttpEntity<Task> httpEntity = new HttpEntity<Task>(task);
 		logger.info("Call api back-end saveForm");
 		restTemplate.exchange(saveTaskUrl, HttpMethod.POST, httpEntity, Task.class);
+		
+	}
+
+	/**
+	 * Send request orderBy(column, order)
+	 * @param column
+	 * @param order
+	 * @return
+	 */
+	public Iterable<Task> getColumnOrderBy(String column, String order) {
+		String baseApiUrl = props.getApiUrl();
+		String getAllTaskUrl = baseApiUrl + "/orderby?column=" + column +"&order=" + order;
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<Iterable<Task>> response = restTemplate.exchange(getAllTaskUrl, HttpMethod.GET, null,
+				new ParameterizedTypeReference<Iterable<Task>>() {
+				});
+		logger.info("Call api back-end getColumnOrderBy()");
+		return response.getBody();
 		
 	}
 

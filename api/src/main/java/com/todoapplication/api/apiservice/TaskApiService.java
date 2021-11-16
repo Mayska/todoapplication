@@ -114,4 +114,47 @@ public class TaskApiService {
 		task.setCreatedAt(now.format(formatter));
 		return task;
 	}
+
+	/**
+	 * Check parameters value and get order by.
+	 * @param column
+	 * @param order
+	 * @return
+	 */
+	public Iterable<Task> getOrderByParam(String column, String order) {
+		boolean valueColumn = checkValueColumn(column);
+		boolean valueOrder = checkValueOrder(order);
+		if(!valueColumn && !valueOrder) {
+			final String msg = TaskConstant.ERROR_PARAM_URL;
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msg);
+		}
+		return taskService.getColumnOrderBy(column,order);
+	}
+	
+	/**
+	 * Check column value createdAt or title
+	 * @param column
+	 * @return
+	 */
+	private boolean checkValueColumn(String column) {
+		boolean checkValue = false;
+		if("createdAt".equals(column)||"title".equals(column)) {
+			checkValue = true;
+		}
+		return checkValue;
+	}
+
+	/**
+	 * Check order value desc or asc 
+	 * @param order
+	 * @return
+	 */
+	private boolean checkValueOrder(String order) {
+		boolean checkValue = false;
+		if("desc".equals(order)||"asc".equals(order)) {
+			checkValue = true;
+		}
+		return checkValue;
+	}
+
 }

@@ -44,8 +44,23 @@ public class TaskService {
 		
 	}
 
+	/**
+	 * Back-end save new task.
+	 * @param task
+	 */
 	public void saveNewTask(Task task) {
 		taskProxy.saveForm(task);
+	}
+
+	/**
+	 * Back-end returns the list of tasks in function of the parameters.
+	 * @param column
+	 * @param order
+	 * @return
+	 */
+	public Iterable<Task> getColumnOrderBy(String column, String order) {
+		return taskProxy.getColumnOrderBy(column,order);
+		
 	}
 
 }
